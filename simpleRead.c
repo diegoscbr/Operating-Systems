@@ -1,10 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
     // Check if the file path is provided as a command-line argument
+    //if not, it is a readNWrite to stdout
     if (argc < 2) {
-        printf("Please provide the file path as a command-line argument.\n");
-        return 1;
+        // Prompt for user input
+        char line[256];
+        printf("Enter text: ");
+        fgets(line, sizeof(line), stdin);
+
+        // Print the input to stdout
+        printf("Input: %s", line);
+        return 0;
     }
 
     // Open the file for reading
