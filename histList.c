@@ -62,7 +62,7 @@ int main() {
     printList(head);
 
     // Free the list
-   / freeList(&head);
+    freeList(&head);
     printf("Linked List: \n");
     printList(head);
 
