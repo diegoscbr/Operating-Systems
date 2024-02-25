@@ -6,8 +6,11 @@
 #include "histList.h"
 
 #define GUSH_ROOT "/workspaces/Operating-Systems/"
-
 #define MAX_ARGUMENTS 10
+#define MAX_COMMAND_LENGTH 100
+char *path[MAX_ARGUMENTS];
+int pathCount = 0;
+
 Node* commandHistory = NULL;
 
 int main(int argc, char *argv[]) {
@@ -76,6 +79,32 @@ int main(int argc, char *argv[]) {
             }
             printf("gush> ");
             continue;
+        }
+        // Check for the path command
+        if (strcmp(arguments[0], "path") == 0)
+        {
+            // Clear the old path
+            pathCount = 0;
+            // Add each argument to the path
+            for (int i = 1; i < arg_count; i++)
+            {
+                path[pathCount++] = arguments[i];
+            }
+
+            printf("gush> ");
+            continue;
+        }
+    // Search for the command in the directories specified in the path
+        char cmd[MAX_COMMAND_LENGTH];
+        for (int i = 0; i < pathCount; i++)
+        {
+            snprintf(cmd, sizeof(cmd), "%s/%s", path[i], arguments[0]);
+            if (access(cmd, X_OK) == 0)
+            {
+                // The command was found in the path
+                arguments[0] = cmd;
+                break;
+            }
         }
 
         // Fork a child process
