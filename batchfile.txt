@@ -1,0 +1,1 @@
+ls pwd cd cat ./message.txt la -la /tmp

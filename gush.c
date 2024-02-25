@@ -14,6 +14,16 @@ int main(int argc, char *argv[]) {
         printf("Usage: %s [optional_command]\n", argv[0]);
         return 1;
     }
+    /*Batch Mode*/
+    else if(argc >1){
+        FILE *file = fopen(argv[1], "r"); //open the batch file 
+        if (file == NULL) {
+            fprintf(stderr, "Error: Could not open file\n");
+            return 1;
+        }
+        
+    }
+    //Interactive mode
     // Display prompt
    printf("gush> ");
 
