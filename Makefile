@@ -1,15 +1,17 @@
 CC = gcc
 CFLAGS = -Wall -Wextra
 
-histList.o: histList.c histList.h
-	$(CC) $(CFLAGS) -c histList.c
+SRCS = gush.c histList.c
+OBJS = $(SRCS:.c=.o)
 
+all: gush
 
-gush: gush.c histList.o
-	$(CC) $(CFLAGS) gush.c histList.o -o gush
+gush: $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
 
-
-.PHONY: clean
+%.o: %.c %.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f gush histList.o
+	rm -f $(OBJS) gush
+

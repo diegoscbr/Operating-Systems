@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include "histList.h"
 
+#define GUSH_ROOT "/workspaces/Operating-Systems/"
 
 #define MAX_ARGUMENTS 10
 Node* commandHistory = NULL;
@@ -21,6 +22,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Error: Could not open file\n");
             return 1;
         }
+
         
     }
     //Interactive mode
@@ -58,6 +60,20 @@ int main(int argc, char *argv[]) {
         // Check for the history command
         if (strcmp(arguments[0], "history") == 0) {
             printList(commandHistory);
+            printf("gush> ");
+            continue;
+        }
+            // Check for the cd command
+        if (strcmp(arguments[0], "cd") == 0) {
+            char *dir = arguments[1];
+            if (strcmp(dir, "root") == 0)
+            {
+                dir = GUSH_ROOT;
+            }
+            if (chdir(dir) != 0)
+            {
+                perror("chdir");
+            }
             printf("gush> ");
             continue;
         }
