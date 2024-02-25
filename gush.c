@@ -3,9 +3,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include "histList.c"
 
-#define MAX_COMMAND_LENGTH 100
+
 #define MAX_ARGUMENTS 10
+Node* commandHistory = NULL;
 
 int main(int argc, char *argv[]) {
     if (argc > 2) {
@@ -37,10 +39,16 @@ int main(int argc, char *argv[]) {
         }
         arguments[arg_count] = NULL;
 
-        // Check for the quit command
-        if (strcmp(arguments[0], "./quit") == 0) {
-            printf("Exiting gush shell...\n");
+        // Check for the exit command
+        if (strcmp(arguments[0], "exit") == 0) {
+            printf("Exiting G.eorgetown U.niversity S.H.ell...\n");
             break;
+        }
+
+        // Check for the history command
+        if (strcmp(arguments[0], "history") == 0) {
+            printList(commandHistory);
+            continue;
         }
 
         // Fork a child process
@@ -58,6 +66,7 @@ int main(int argc, char *argv[]) {
         } else {
             // Parent process
             waitpid(pid, &status, 0);
+            insertAtEnd(&commandHistory, 1);
         }
 
         // Display prompt again

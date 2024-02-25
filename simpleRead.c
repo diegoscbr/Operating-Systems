@@ -1,35 +1,49 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-int main(int argc, char *argv[]) {
-    // Check if the file path is provided as a command-line argument
-    //if not, it is a readNWrite to stdout
-    if (argc < 2) {
-        // Prompt for user input
-        char line[256];
-        printf("Enter text: ");
-        fgets(line, sizeof(line), stdin);
+#define MAX_CHAR_LEN 80
 
-        // Print the input to stdout
-        printf("Input: %s", line);
-        return 0;
+void copyInputLine(FILE* input, FILE* output) {
+    char line[MAX_CHAR_LEN + 1]; // +1 for null terminator
+    if (fgets(line, sizeof(line), input) != NULL) {
+        // Remove trailing newline character if present
+        size_t len = strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = '\0';
+        }
+        // Cut off at MAX_CHAR_LEN characters
+        if (len > MAX_CHAR_LEN) {
+            line[MAX_CHAR_LEN] = '\0';
+        }
+        fprintf(output, "%s\n", line);
+    }
+}
+
+int main(int argc, char* argv[]) {
+    FILE* output = stdout; // default to stdout
+    char outputFileName[100] = "";
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
+            strncpy(outputFileName, argv[i + 1], sizeof(outputFileName) - 1);
+            outputFileName[sizeof(outputFileName) - 1] = '\0'; // Ensure null termination
+            i++; // Move to the next argument
+        }
     }
 
-    // Open the file for reading
-    FILE *file = fopen(argv[1], "r");
-    if (file == NULL) {
-        printf("Failed to open the file.\n");
-        return 1;
+    if (outputFileName[0] != '\0') {
+        output = fopen(outputFileName, "w");
+        if (output == NULL) {
+            fprintf(stderr, "Error: Unable to open output file '%s'.\n", outputFileName);
+            return 1;
+        }
     }
 
-    // Read and print each line from the file
-    char line[256];
-    while (fgets(line, sizeof(line), file)) {
-        printf("%s", line);
+    copyInputLine(stdin, output);
+
+    if (output != stdout) {
+        fclose(output);
     }
-    printf("\n");
-    // Close the file
-    fclose(file);
 
     return 0;
 }
+
