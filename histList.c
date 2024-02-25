@@ -48,7 +48,7 @@ void freeList(Node** headRef) {
 }
 
 /*TEST for histList.c*/
-
+/*
 int main() {
     Node* head = NULL;
 
@@ -68,3 +68,4 @@ int main() {
 
     return 0;
 }
+*/
