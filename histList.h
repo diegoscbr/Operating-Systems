@@ -4,13 +4,13 @@
 // Node structure for the linked list
 typedef struct Node {
     
-    int data;
+    char* data;
     struct Node* next;
 } Node;
 
 // Function prototype to insert a node at the end of the list
-void insertAtEnd(Node** headRef, int data);
-Node* createNode(int data);
+void insertAtEnd(Node** headRef, char* data);
+Node* createNode(char* data);
 void printList(Node* head);
 void freeList(Node** headRef);
 
