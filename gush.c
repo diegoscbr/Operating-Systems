@@ -72,6 +72,6 @@ int main(int argc, char *argv[]) {
         // Display prompt again
         printf("gush> ");
     }
-
+     freeList(&commandHistory); // Free the list
     return 0;
 }
