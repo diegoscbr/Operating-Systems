@@ -16,15 +16,17 @@ int main(int argc, char *argv[]) {
     // Display prompt
     printf("gush> ");
 
-    char command[MAX_COMMAND_LENGTH];
+    char * command = NULL;
+    size_t len = 0;
+    ssize_t read;
     char *arguments[MAX_ARGUMENTS];
     char *token;
     pid_t pid;
     int status;
 
-    while (fgets(command, MAX_COMMAND_LENGTH, stdin) != NULL) {
-        // Remove trailing newline
-        command[strcspn(command, "\n")] = 0;
+  while ((read = getline(&command, &len, stdin)) != -1) {
+    // Remove trailing newline
+        command[read - 1] = '\0';
 
         // Tokenize the command
         int arg_count = 0;
