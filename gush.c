@@ -14,7 +14,6 @@ int main(int argc, char *argv[]) {
         printf("Usage: %s [optional_command]\n", argv[0]);
         return 1;
     }
-
     // Display prompt
    printf("gush> ");
 
