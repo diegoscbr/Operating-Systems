@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include "histList.c"
+#include "histList.h"
 
 
 #define MAX_ARGUMENTS 10
