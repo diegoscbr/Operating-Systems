@@ -30,9 +30,11 @@ void insertAtEnd(Node** headRef, char* data) {
 
 void printList(Node* head) {
     Node* current = head;
+    int i = 1;
     while (current != NULL) {
-        printf("%s\n", current->data);
+        printf("%d: %s\n", i, current->data);
         current = current->next;
+        i++;
     }
 }
 
@@ -68,4 +70,6 @@ int main() {
 
     return 0;
 }
+
 */
+
