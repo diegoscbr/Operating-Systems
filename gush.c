@@ -66,7 +66,8 @@ int main(int argc, char *argv[]) {
         } else {
             // Parent process
             waitpid(pid, &status, 0);
-            insertAtEnd(&commandHistory, 1);
+            insertAtEnd(&commandHistory, command);
+            continue;
         }
 
         // Display prompt again
