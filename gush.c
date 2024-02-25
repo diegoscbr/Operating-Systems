@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Display prompt
-    printf("gush> ");
+   printf("gush> ");
 
     char * command = NULL;
     size_t len = 0;
@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 
   while ((read = getline(&command, &len, stdin)) != -1) {
     // Remove trailing newline
+
         command[read - 1] = '\0';
 
         // Tokenize the command
@@ -48,6 +49,7 @@ int main(int argc, char *argv[]) {
         // Check for the history command
         if (strcmp(arguments[0], "history") == 0) {
             printList(commandHistory);
+            printf("gush> ");
             continue;
         }
 
@@ -67,7 +69,7 @@ int main(int argc, char *argv[]) {
             // Parent process
             waitpid(pid, &status, 0);
             insertAtEnd(&commandHistory, command);
-            continue;
+           // continue;
         }
 
         // Display prompt again
