@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "histList.h"
+#include "executeCommand.h"
 
 #define GUSH_ROOT "/workspaces/Operating-Systems/"
 #define MAX_ARGUMENTS 10
@@ -12,6 +13,20 @@ char *path[MAX_ARGUMENTS];
 int pathCount = 0;
 
 Node* commandHistory = NULL;
+//function to parse args of batch file
+int parse(char *line, char *arguments[]) {
+    char *token;
+    int arg_count = 0;
+
+    token = strtok(line, " ");
+    while (token != NULL && arg_count < MAX_ARGUMENTS - 1) {
+        arguments[arg_count++] = token;
+        token = strtok(NULL, " ");
+    }
+    arguments[arg_count] = NULL;
+
+    return arg_count;
+} 
 
 int main(int argc, char *argv[]) {
     if (argc > 2) {
@@ -19,15 +34,30 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     /*Batch Mode*/
-    else if(argc >1){
+     if(argc >1){
         FILE *file = fopen(argv[1], "r"); //open the batch file 
         if (file == NULL) {
             fprintf(stderr, "Error: Could not open file\n");
             return 1;
         }
+        char *arguments[MAX_ARGUMENTS];
+        char line[MAX_COMMAND_LENGTH];
+        while (fgets(line, sizeof(line), file) != NULL)
+        {
+            // Parse the line into arguments
+            int arg_count = parse(line, arguments);
 
-        
+            // Execute the command
+            executeCommand(arguments, arg_count);
+
+            // Add the command to the history
+            insertAtEnd(&commandHistory, line);
+        }
+
+    fclose(file);
+    return 0;
     }
+    
     //Interactive mode
     // Display prompt
    printf("gush> ");
