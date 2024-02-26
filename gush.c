@@ -15,18 +15,23 @@ int pathCount = 0;
 Node* commandHistory = NULL;
 //function to parse args of batch file
 int parse(char *line, char *arguments[]) {
-    char *token;
     int arg_count = 0;
 
-    token = strtok(line, " ");
-    while (token != NULL && arg_count < MAX_ARGUMENTS - 1) {
+    // Remove the trailing newline character
+    line[strcspn(line, "\n")] = 0;
+
+    char *token = strtok(line, " ");
+
+    while (token != NULL) {
         arguments[arg_count++] = token;
         token = strtok(NULL, " ");
     }
+
+    // Null terminate the list of arguments
     arguments[arg_count] = NULL;
 
     return arg_count;
-} 
+}
 
 int main(int argc, char *argv[]) {
     if (argc > 2) {
@@ -49,15 +54,12 @@ int main(int argc, char *argv[]) {
 
             // Execute the command
             executeCommand(arguments, arg_count);
-
-            // Add the command to the history
-            insertAtEnd(&commandHistory, line);
         }
 
     fclose(file);
     return 0;
     }
-    
+
     //Interactive mode
     // Display prompt
    printf("gush> ");
