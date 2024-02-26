@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 #include "histList.h"
 #include "executeCommand.h"
@@ -49,6 +50,11 @@ int main(int argc, char *argv[]) {
         char line[MAX_COMMAND_LENGTH];
         while (fgets(line, sizeof(line), file) != NULL)
         {
+            if (ferror(file))
+            {
+                fprintf(stderr, "Error reading file\n");
+                break;
+            }
             // Parse the line into arguments
             int arg_count = parse(line, arguments);
 
@@ -100,7 +106,11 @@ int main(int argc, char *argv[]) {
         }
             // Check for the cd command
         if (strcmp(arguments[0], "cd") == 0) {
-            char *dir = arguments[1];
+            if(arguments[1] == NULL){
+                fprintf(stderr, "Error: No directory specified\n");
+            }
+            else{
+              char *dir = arguments[1];
             if (strcmp(dir, "root") == 0)
             {
                 dir = GUSH_ROOT;
@@ -111,7 +121,9 @@ int main(int argc, char *argv[]) {
             }
             insertAtEnd(&commandHistory, command);
             printf("gush> ");
-            continue;
+            continue;  
+            }
+            
         }
         // Check for the path command
         if (strcmp(arguments[0], "path") == 0)
@@ -139,6 +151,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
+
 
         // Fork a child process
         pid = fork();
