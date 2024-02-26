@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {
             {
                 perror("chdir");
             }
+            insertAtEnd(&commandHistory, command);
             printf("gush> ");
             continue;
         }
